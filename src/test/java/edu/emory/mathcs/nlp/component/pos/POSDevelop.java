@@ -41,10 +41,8 @@ public class POSDevelop
 	@Test
 	public void develop() throws IOException
 	{
-		final String  root = "/Users/meerahahn/Desktop/GitHub/cs571/wsj-pos/";
-		//final String train_file = root+"trn/00.pos";
-		//final String  develop_file = root+"dev/20.pos";
-		final boolean average = true;
+		final String  root = "/Users/jdchoi/Documents/Data/experiments/wsj/pos/";
+		final boolean average = false;
 		final double  ambiguity_class_threshold = 0.4;
 		final double  learning_rate = 0.02;
 		final double  ridge = 0.1;
@@ -59,11 +57,7 @@ public class POSDevelop
 		// collect ambiguity classes from the training data
 		System.out.println("Collecting ambiguity classes.");
 		AmbiguityClassMap ambi = new AmbiguityClassMap();
-		String train_file;
-		for (int i = 0; i < 19; i++) {
-			train_file = root+"trn/"+ String.format("%02d", i) + ".pos";
-			iterate(reader, train_file, nodes -> ambi.addAll(nodes));
-		}
+		iterate(reader, trainFiles, nodes -> ambi.add(nodes));
 		ambi.expand(ambiguity_class_threshold);
 		
 		// collect training instances from the training data
@@ -71,35 +65,22 @@ public class POSDevelop
 		StringModel model = new StringModel(new MultinomialWeightVector());
 		POSTagger<POSNode> tagger = new POSTagger<>(NLPFlag.TRAIN, model);
 		tagger.setAmbiguityClassMap(ambi);
-		for (int i = 0; i < 19; i++) {
-			train_file = root+"trn/"+ String.format("%02d", i) + ".pos";
-			iterate(reader, train_file, nodes -> tagger.process(nodes));
-		}
+		iterate(reader, trainFiles, nodes -> tagger.process(nodes));
 		model.vectorize(label_cutoff, feature_cutoff);
 		
 		// train the statistical model using the development data
 		StochasticGradientDescent sgd = new MultinomialAdaGradHinge(model.getWeightVector(), average, learning_rate, ridge);
-		//StochasticGradientDescent sgd = new MultinomialPerceptron(model.getWeightVector(), average, learning_rate);
 		Eval eval = new AccuracyEval();
 		tagger.setFlag(NLPFlag.EVALUATE);
 		tagger.setEval(eval);
 		
-		double max_eval = 0;
 		for (int i=0; i<epochs; i++)
 		{
 			sgd.train(model.getInstanceList());
 			eval.clear();
-			String develop_file;
-			for (int j = 19; j < 22; j++) {
-				develop_file = root+"dev/"+ String.valueOf(j) + ".pos";
-				iterate(reader, develop_file, nodes -> tagger.process(nodes));
-			}
-			if (eval.score() > max_eval) {
-				max_eval = eval.score();
-			}
+			iterate(reader, developFiles, nodes -> tagger.process(nodes));
 			System.out.printf("%3d: %5.2f\n", i, eval.score());
 		}
-		System.out.printf("Max eval: %5.2f\n", max_eval);
 	}
 	
 	void iterate(TSVReader<POSNode> reader, List<String> filenames, Consumer<POSNode[]> f) throws IOException
