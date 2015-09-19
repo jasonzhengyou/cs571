@@ -24,14 +24,39 @@ import edu.emory.mathcs.nlp.component.util.state.L2RState;
  */
 public class POSState<N extends POSNode> extends L2RState<N>
 {
-	public POSState(N[] nodes)
+	private AmbiguityClassMap ambiguity_class_map;
+	
+	public POSState(N[] nodes, AmbiguityClassMap map)
 	{
-		super(nodes, N::getPOSTag, N::setPOSTag);
+		super(nodes);
+		setAmbiguityClass(map);
+	}
+	
+	@Override
+	protected String getLabel(N node)
+	{
+		return node.getPOSTag();
+	}
+	
+	@Override
+	protected String setLabel(N node, String label)
+	{
+		return node.setPOSTag(label);
 	}
 
 	@Override
 	public void evaluate(Eval eval)
 	{
 		evaluateTokens((AccuracyEval)eval);
+	}
+	
+	public String getAmbiguityClass(N node)
+	{
+		return ambiguity_class_map.get(node);
+	}
+	
+	public void setAmbiguityClass(AmbiguityClassMap map)
+	{
+		ambiguity_class_map = map;		
 	}
 }

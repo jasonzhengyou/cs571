@@ -28,8 +28,8 @@ import edu.emory.mathcs.nlp.component.util.eval.AccuracyEval;
 import edu.emory.mathcs.nlp.component.util.eval.Eval;
 import edu.emory.mathcs.nlp.component.util.reader.TSVReader;
 import edu.emory.mathcs.nlp.learn.model.StringModel;
-import edu.emory.mathcs.nlp.learn.sgd.StochasticGradientDescent;
-import edu.emory.mathcs.nlp.learn.sgd.adagrad.MultinomialAdaGradHinge;
+import edu.emory.mathcs.nlp.learn.optimization.OnlineOptimizer;
+import edu.emory.mathcs.nlp.learn.optimization.minibatch.AdaDeltaMiniBatch;
 import edu.emory.mathcs.nlp.learn.weight.MultinomialWeightVector;
 
 
@@ -43,16 +43,14 @@ public class POSDevelop
 	{
 		final String  root = "/Users/meerahahn/Desktop/GitHub/cs571/wsj-pos/";
 		final boolean average = false;
-		final double  ambiguity_class_threshold = 0.4;
-		final double  learning_rate = 0.04;
-		final double  ridge = 0.1;
+		final double  ambiguity_class_threshold = 0;
 		final int     epochs = 100;
-		final int     label_cutoff   = 2;
-		final int     feature_cutoff = 2;
+		final int     label_cutoff   = 0;
+		final int     feature_cutoff = 0;
 		
 		TSVReader<POSNode> reader = new TSVReader<>(new POSIndex(0,1));
 		List<String> trainFiles   = FileUtils.getFileList(root+"trn/", "pos");
-		List<String> developFiles = FileUtils.getFileList(root+"dev/", "pos");
+		List<String> developFiles = FileUtils.getFileList(root+"tst/", "pos");
 		
 		// collect ambiguity classes from the training data
 		System.out.println("Collecting ambiguity classes.");
@@ -66,12 +64,17 @@ public class POSDevelop
 		POSTagger<POSNode> tagger = new POSTagger<>(model);
 		tagger.setFlag(NLPFlag.TRAIN);
 		tagger.setAmbiguityClassMap(ambi);
+		tagger.setFeatureTemplate(new POSFeatureTemplate<>());
 		iterate(reader, trainFiles, nodes -> tagger.process(nodes));
 		model.vectorize(label_cutoff, feature_cutoff, false);
 		
 		// train the statistical model using the development data
+<<<<<<< HEAD
 		StochasticGradientDescent sgd = new MultinomialAdaGradHinge(model.getWeightVector(), average, learning_rate, ridge);
 		//StochasticGradientDescent sgd = new MultinomialPerceptron(model.getWeightVector(), average, learning_rate);
+=======
+		OnlineOptimizer sgd = new AdaDeltaMiniBatch(model.getWeightVector(), 0.1, average, 0.01, 0.2);
+>>>>>>> emory-courses/master
 		Eval eval = new AccuracyEval();
 		tagger.setFlag(NLPFlag.EVALUATE);
 		tagger.setEval(eval);

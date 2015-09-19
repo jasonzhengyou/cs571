@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import edu.emory.mathcs.nlp.common.util.IOUtils;
+import edu.emory.mathcs.nlp.common.util.Language;
 
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
@@ -29,16 +30,15 @@ public class POSConfigTest
 	@Test
 	public void test()
 	{
-		String filename = "src/main/resources/edu/emory/mathcs/nlp/configuration/config_train.xml";
+		String filename = "src/main/resources/configuration/config_train_pos.xml";
 		POSConfig config = new POSConfig(IOUtils.createFileInputStream(filename));
 		POSIndex index = (POSIndex)config.getTSVIndex();
 
-		assertEquals(1, index.form);
-		assertEquals(3, index.pos);
-		assertEquals(4, index.feats);
+		assertEquals( 0, index.form);
+		assertEquals( 1, index.pos);
+		assertEquals(-1, index.feats);
 		
-		assertEquals(1500, config.getDocumentSize());
-		assertEquals(   2, config.getDocumentFrequencyCutoff());
 		assertEquals(0.4d, config.getAmbiguityClassThreshold(), 0);
+		assertEquals(Language.ENGLISH, config.getLanguage());
 	}
 }
