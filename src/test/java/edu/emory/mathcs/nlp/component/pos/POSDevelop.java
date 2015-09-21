@@ -69,12 +69,8 @@ public class POSDevelop
 		model.vectorize(label_cutoff, feature_cutoff, false);
 		
 		// train the statistical model using the development data
-<<<<<<< HEAD
-		StochasticGradientDescent sgd = new MultinomialAdaGradHinge(model.getWeightVector(), average, learning_rate, ridge);
-		//StochasticGradientDescent sgd = new MultinomialPerceptron(model.getWeightVector(), average, learning_rate);
-=======
 		OnlineOptimizer sgd = new AdaDeltaMiniBatch(model.getWeightVector(), 0.1, average, 0.01, 0.2);
->>>>>>> emory-courses/master
+
 		Eval eval = new AccuracyEval();
 		tagger.setFlag(NLPFlag.EVALUATE);
 		tagger.setEval(eval);

@@ -7,15 +7,17 @@
     </tsv>
 
     <optimizer>
-        <algorithm>adadelta-mini-batch</algorithm>
-        <label_cutoff>4</label_cutoff>
-        <feature_cutoff>3</feature_cutoff>
+        <algorithm>liblinear-l2-svc</algorithm>
+        <label_cutoff>6</label_cutoff>
+        <feature_cutoff>9</feature_cutoff>
         <reset_weights>false</reset_weights>
-        <average>false</average>
+        <average>true</average>
         <batch_ratio>0.1</batch_ratio>
         <learning_rate>0.01</learning_rate>
         <decaying_rate>0.4</decaying_rate>
         <bias>0</bias>
+        <cost>.1</cost>
+        <loss>1</loss>
     </optimizer>
     
 	<aggregate tolerance_delta="0.01" max_tolerance="5"/>
