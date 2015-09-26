@@ -608,11 +608,21 @@ public class DEPNode extends POSNode implements Comparable<DEPNode>
 	 */
 	public String getValency(DirectionType direction)
 	{
+		String valency;
 		switch (direction)
 		{
-		case  l: return getLeftValency();
-		case  r: return getRightValency();
-		case  a: return getLeftValency()+"-"+getRightValency();
+		case  l: 
+			valency = getLeftValency();
+			if (valency.isEmpty()) return "0";
+			return valency;
+		case  r:
+			valency = getRightValency();
+			if (valency.isEmpty()) return "0";
+			return valency;
+		case  a: 
+			valency = getLeftValency()+"-"+getRightValency();
+			if (valency.equals("-")) return "0";
+			return valency;
 		default: return null;
 		}
 	}
@@ -729,6 +739,9 @@ public class DEPNode extends POSNode implements Comparable<DEPNode>
 	 */
 	public String getPath(DEPNode node, Field field)
 	{
+		if(this.equals(node)) {
+			return node.getValue(field);
+		}
 		DEPNode lca = getLowestCommonAncestor(node);
 		return (lca != null) ? getPath(node, lca, field) : null;
 	}
