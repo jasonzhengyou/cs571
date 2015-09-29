@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import edu.emory.mathcs.nlp.common.util.Joiner;
 import edu.emory.mathcs.nlp.component.util.feature.Field;
-import edu.emory.mathcs.nlp.component.util.node.DirectionType;
+import edu.emory.mathcs.nlp.component.util.feature.Direction;
 import edu.emory.mathcs.nlp.component.util.node.FeatMap;
 import edu.emory.mathcs.nlp.component.util.reader.TSVReader;
 
@@ -85,12 +85,12 @@ public class DEPNodeTest
 		path = nodes[4].getPath(nodes[8], Field.word_form);
 		assertEquals(path, "^years^old^Vinken^join");		
 		//test valency
-		assertEquals(nodes[8].getValency(DirectionType.l), "<<");
-		assertEquals(nodes[8].getValency(DirectionType.r), ">>");
-		assertEquals(nodes[8].getValency(DirectionType.a), "<<->>");
-		assertEquals(nodes[0].getValency(DirectionType.l), "0");
-		assertEquals(nodes[0].getValency(DirectionType.r), "0");
-		assertEquals(nodes[0].getValency(DirectionType.a), "0");
+		assertEquals(nodes[8].getValency(Direction.left), "<<");
+		assertEquals(nodes[8].getValency(Direction.right), ">>");
+		assertEquals(nodes[8].getValency(Direction.all), "<<->>");
+		assertEquals(nodes[0].getValency(Direction.left), "0");
+		assertEquals(nodes[0].getValency(Direction.right), "0");
+		assertEquals(nodes[0].getValency(Direction.all), "0");
 
 
 	}
