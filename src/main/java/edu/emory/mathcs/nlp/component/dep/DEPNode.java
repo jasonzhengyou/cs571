@@ -616,24 +616,9 @@ public class DEPNode extends POSNode implements Comparable<DEPNode>
 		String valency;
 		switch (direction)
 		{
-<<<<<<< HEAD
-		case  l: 
-			valency = getLeftValency();
-			if (valency.isEmpty()) return "0";
-			return valency;
-		case  r:
-			valency = getRightValency();
-			if (valency.isEmpty()) return "0";
-			return valency;
-		case  a: 
-			valency = getLeftValency()+"-"+getRightValency();
-			if (valency.equals("-")) return "0";
-			return valency;
-=======
 		case  left: return getLeftValency();
 		case  right: return getRightValency();
 		case  all: return getLeftValency()+"-"+getRightValency();
->>>>>>> emory-courses/master
 		default: return null;
 		}
 	}
