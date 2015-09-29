@@ -15,32 +15,14 @@
  */
 package edu.emory.mathcs.nlp.component.util.feature;
 
-
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
  */
-public enum Field
+public enum Direction
 {
-	// form features
-	word_form,
-	simplified_word_form,
-	uncapitalized_simplified_word_form,
-	word_shape,
-	orthographic,	// set
-	prefix,
-	suffix,
-
-	// part-of-speech tagging features
-	lemma,
-	feats,
-	pos_tag,
-	ambiguity_class,
-	
-	// dependency parsing features
-	dependency_label,
-	distance,
-	valency,
-	
-	// more
-	binary;	// set
+	left,
+	right,
+	up,
+	down,
+	all;
 }

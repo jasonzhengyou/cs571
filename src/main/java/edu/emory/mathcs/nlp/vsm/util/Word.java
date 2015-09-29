@@ -13,53 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.emory.mathcs.nlp.component.util.eval;
+package edu.emory.mathcs.nlp.vsm.util;
+
+import java.io.Serializable;
 
 import edu.emory.mathcs.nlp.common.util.MathUtils;
 
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
  */
-public class AccuracyEval implements Eval
+public class Word implements Serializable, Comparable<Word>
 {
-	private int correct;
-	private int total;
+	private static final long serialVersionUID = -8359884564426852692L;
+	public String word;
+	public long   count;
+	public byte[] code;		// binary codes from Huffman tree
+	public int[]  point;	// pointers to the ancestors
 	
-	public AccuracyEval()
+	public Word(String word)
 	{
-		clear();
+		set(word, 0);
 	}
 	
-	public void add(int correct, int total)
+	public Word(String word, int count)
 	{
-		this.correct += correct;
-		this.total   += total;
+		set(word, count);
 	}
 	
-	public void clear()
+	public void set(String word, int count)
 	{
-		correct = total = 0;
+		this.word  = word;
+		this.count = count;
 	}
 	
-	public int correct()
+	public void increment(int count)
 	{
-		return correct;
+		this.count += count;
 	}
 	
-	public int total()
+	public int codeLength()
 	{
-		return total;
+		return code.length;
 	}
 	
 	@Override
-	public double score()
+	public int compareTo(Word o)
 	{
-		return MathUtils.accuracy(correct, total);
+		return MathUtils.signum(count - o.count);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return String.format("ACC = %5.2f", score());
+		return word+":"+count;
 	}
 }

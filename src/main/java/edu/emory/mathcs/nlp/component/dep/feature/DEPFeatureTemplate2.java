@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.emory.mathcs.nlp.component.util.feature;
+package edu.emory.mathcs.nlp.component.dep.feature;
 
+import edu.emory.mathcs.nlp.component.dep.DEPFeatureTemplate;
+import edu.emory.mathcs.nlp.component.util.feature.FeatureItem;
+import edu.emory.mathcs.nlp.component.util.feature.Field;
+import edu.emory.mathcs.nlp.component.util.feature.Source;
 
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
  */
-public enum Field
+public class DEPFeatureTemplate2 extends DEPFeatureTemplate
 {
-	// form features
-	word_form,
-	simplified_word_form,
-	uncapitalized_simplified_word_form,
-	word_shape,
-	orthographic,	// set
-	prefix,
-	suffix,
+	private static final long serialVersionUID = 4717085054409332081L;
 
-	// part-of-speech tagging features
-	lemma,
-	feats,
-	pos_tag,
-	ambiguity_class,
-	
-	// dependency parsing features
-	dependency_label,
-	distance,
-	valency,
-	
-	// more
-	binary;	// set
+	@Override
+	protected void init()
+	{
+		// lemma features 
+		add(new FeatureItem<>(Source.i, 0, Field.word_form));
+		add(new FeatureItem<>(Source.j, 0, Field.word_form));
+		add(new FeatureItem<>(Source.i, 0, Field.dependency_label));
+	}
 }
