@@ -46,8 +46,16 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.i, 0, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.j, 0, Field.valency, Direction.all));
 		
-		add(new FeatureItem<>(Source.i, 0, Field.simplified_word_form));
-		add(new FeatureItem<>(Source.j, 0, Field.simplified_word_form));
+		//
+		add(new FeatureItem<>(Source.i, -1, Field.simplified_word_form));
+		add(new FeatureItem<>(Source.i,  0, Field.simplified_word_form));
+		add(new FeatureItem<>(Source.i,  1, Field.simplified_word_form));
+		
+		add(new FeatureItem<>(Source.j, -1, Field.simplified_word_form));
+		add(new FeatureItem<>(Source.j,  0, Field.simplified_word_form));
+		add(new FeatureItem<>(Source.j,  1, Field.simplified_word_form));
+		
+		add(new FeatureItem<>(Source.k,  1, Field.simplified_word_form));
 
 		
 		// 2nd-order features
