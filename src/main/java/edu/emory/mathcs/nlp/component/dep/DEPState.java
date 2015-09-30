@@ -106,6 +106,7 @@ public class DEPState<N extends DEPNode> extends NLPState<N>
 			{
 				s.setHead(i, label.substring(3));
 				label = REDUCE;
+				//retrain????
 			}
 			else
 				label = SHIFT;

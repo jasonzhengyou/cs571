@@ -46,7 +46,7 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.i, 0, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.j, 0, Field.valency, Direction.all));
 		
-		//
+		//word form
 		add(new FeatureItem<>(Source.i, -1, Field.simplified_word_form));
 		add(new FeatureItem<>(Source.i,  0, Field.simplified_word_form));
 		add(new FeatureItem<>(Source.i,  1, Field.simplified_word_form));
@@ -56,8 +56,16 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.j,  1, Field.simplified_word_form));
 		
 		add(new FeatureItem<>(Source.k,  1, Field.simplified_word_form));
-
 		
+		//suffix and prefix
+		add(new FeatureItem<>(Source.i,  0, Field.suffix));
+		add(new FeatureItem<>(Source.j,  0, Field.suffix));
+		add(new FeatureItem<>(Source.k,  0, Field.suffix));
+
+		add(new FeatureItem<>(Source.j, 0, Field.prefix));
+		add(new FeatureItem<>(Source.i, 0, Field.prefix));
+		add(new FeatureItem<>(Source.k, 0, Field.prefix));
+
 		// 2nd-order features
 		add(new FeatureItem<>(Source.i, Relation.h  , 0, Field.lemma));
 		add(new FeatureItem<>(Source.i, Relation.lmd, 0, Field.lemma));
