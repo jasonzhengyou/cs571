@@ -15,6 +15,8 @@
  */
 package edu.emory.mathcs.nlp.learn.optimization;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.emory.mathcs.nlp.common.util.DSUtils;
@@ -54,5 +56,24 @@ public abstract class Optimizer
 		double[] scores = weight_vector.scores(instance.getVector());
 		scores[instance.getLabel()] -= 1;
 		return DSUtils.maxIndex(scores);
+	}
+	
+	//Beam Search
+	protected ArrayList<Integer> multinomialBeamHingeLoss(Instance instance, int beamSize)
+	{
+		ArrayList<Integer> topKScores = new ArrayList<Integer>();
+		double[] scores = weight_vector.scores(instance.getVector());
+		scores[instance.getLabel()] -= 1;
+		if(scores.length <= beamSize){
+			for (int i = 0; i < scores.length; i++) topKScores.add(i);
+			return topKScores;
+		}
+		int[] copy = new int[scores.length];
+		System.arraycopy(scores, 0, copy, 0, scores.length );
+		Arrays.sort(copy);
+		for(int i : Arrays.copyOfRange(copy, copy.length-beamSize,copy.length)) {
+			topKScores.add(Arrays.asList(scores).indexOf(i));
+		}
+		return topKScores;
 	}
 }

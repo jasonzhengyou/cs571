@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import edu.emory.mathcs.nlp.component.dep.DEPState;
 import edu.emory.mathcs.nlp.component.util.eval.Eval;
 import edu.emory.mathcs.nlp.component.util.feature.FeatureTemplate;
 import edu.emory.mathcs.nlp.component.util.state.NLPState;
@@ -146,6 +149,9 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	protected abstract StringPrediction getModelPrediction(S state, StringVector vector);
 	/** Adds a training instance (label, x) to the statistical model. */
 	protected abstract void addInstance(String label, StringVector vector);
+	/** @return the top k prediction made by the statistical model(s). */
+	protected abstract List<StringPrediction> getModelPredictionBeam(S state, StringVector vector);
+
 	
 	public void process(N[] nodes)
 	{
@@ -168,6 +174,47 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	protected StringPrediction getPrediction(S state, StringVector vector)
 	{
 		return isTrain() ? new StringPrediction(state.getOraclePrediction(), 1) : getModelPrediction(state, vector);
+	}
+	
+	public void processBeam(N[] nodes, int beam_size)
+	{
+		if (!isDecode()) {
+			process(nodes);
+			return;
+		}
+		S state = createState(nodes);
+		feature_template.setState(state);
+
+		while (!state.isTerminate())
+		{
+			StringVector vector = extractFeatures(state);
+			if (isTrain() || isAggregate()) addInstance(state.getOraclePrediction(), vector);
+			ArrayList<StringPrediction> labels = getPredictionBeam(state, vector, beam_size);
+			
+			for(StringPrediction label: labels) {
+				DEPState tempState = new DEPState((DEPState) state);
+				processBeamAux(label, tempState);
+			}
+		}
+	
+		if (isEvaluate()) state.evaluate(eval);
+		
+	}
+	public void processBeamAux(StringPrediction label, DEPState state) {
+		
+		state.next(label);
+	}
+	
+	/** @return the oracle prediction for training; otherwise, the model predict beam size of things. */
+	protected ArrayList<StringPrediction> getPredictionBeam(S state, StringVector vector, int beamSize)
+	{
+		ArrayList<StringPrediction> list = new ArrayList<>();
+		if (isTrain()) {
+			list.add(new StringPrediction(state.getOraclePrediction(), 1));
+			return list;
+		}
+		list = getModelPredictionBeam(state, vector, beamSize);
+		
 	}
 	
 	/** @return the vector consisting of all features extracted from the state. */

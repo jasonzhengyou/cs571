@@ -25,5 +25,6 @@ public enum NLPFlag
 	AGGREGATE,
 	EVALUATE,
 	DECODE,
-	VALIDATE;
+	VALIDATE,
+	BEAM;
 }

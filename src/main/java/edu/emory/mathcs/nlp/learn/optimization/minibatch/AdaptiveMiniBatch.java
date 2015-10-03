@@ -15,6 +15,7 @@
  */
 package edu.emory.mathcs.nlp.learn.optimization.minibatch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.emory.mathcs.nlp.common.util.MathUtils;
@@ -174,4 +175,23 @@ public abstract class AdaptiveMiniBatch extends OnlineOptimizer
 			 }
 		 }
 	 }
+	 
+//	 protected void updateGradientsHingeMultinomialBeamSearch(Instance instance, int beamSize)
+//	 {
+//		 Vector x = instance.getVector();
+//		 int yp = instance.getLabel();
+//		 ArrayList<Integer> yns = multinomialBeamHingeLoss(instance, beamSize);
+//		 
+//		 for (int yn : yns) {
+//			 if (yp != yn)
+//			 {
+//				 for (IndexValuePair xi : x)
+//				 {
+//					 gradients.add(yp, xi.getIndex(),  1);
+//					 gradients.add(yn, xi.getIndex(), -1);
+//				 }
+//			 }
+//		 }
+//
+//	 }
 }

@@ -56,6 +56,8 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 	public int feature_template = 0;
 	@Option(name="-m", usage="model file (optional)", required=false, metaVar="<filename>")
 	public String model_file = null;
+	@Option(name="-b", usage="beam size (default: 1)", required=false, metaVar="integer")
+	public int beam_size = 1;
 	
 	public NLPTrain() {};
 	
@@ -156,6 +158,7 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 			eval.clear();
 			optimizer.train(model.getInstanceList());
 			iterate(reader, developFiles, nodes -> component.process(nodes));
+			//iterate(reader, developFiles, nodes -> component.processBeam(nodes, beam_size));
 			currScore = eval.score();
 			
 			if (prevScore < currScore)
@@ -197,6 +200,7 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 		eval.clear();
 		optimizer.train(model.getInstanceList());
 		iterate(reader, developFiles, nodes -> component.process(nodes));
+		//iterate(reader, developFiles, nodes -> component.processBeam(nodes, beam_size));
 		BinUtils.LOG.info(String.format("- %s\n", eval.toString()));
 		return eval.score();
 	}
