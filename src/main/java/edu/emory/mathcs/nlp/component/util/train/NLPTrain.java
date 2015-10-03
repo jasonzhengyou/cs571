@@ -148,7 +148,7 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 	protected double trainOnline(TSVReader<N> reader, List<String> developFiles, NLPComponent<N,?> component, Optimizer optimizer, StringModel model)
 	{
 		Eval eval = component.getEval();
-		double prevScore = 0, currScore;
+		double prevScore = 0, currScore, bestScore, twoBackScore = 0, threeBackScore = 0;
 		float[] prevWeight = null;
 		
 		for (int epoch=1; ;epoch++)
@@ -161,6 +161,20 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 			if (prevScore < currScore)
 			{
 				prevScore  = currScore;
+				twoBackScore  = prevScore;
+				threeBackScore  = twoBackScore;
+				prevWeight = model.getWeightVector().toArray().clone();
+			}
+			else if (twoBackScore < currScore) { // try 2 back as well
+				prevScore  = currScore;
+				twoBackScore  = prevScore;
+				threeBackScore  = twoBackScore;
+				prevWeight = model.getWeightVector().toArray().clone();
+			}
+			else if (threeBackScore < currScore) { // try 3 back as well
+				prevScore  = currScore;
+				twoBackScore  = prevScore;
+				threeBackScore  = twoBackScore;
 				prevWeight = model.getWeightVector().toArray().clone();
 			}
 			else

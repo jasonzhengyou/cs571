@@ -48,6 +48,7 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 		{
 		case word_form: return node.getWordForm();
 		case simplified_word_form: return node.getSimplifiedWordForm();
+		case uncapitalized_simplified_word_form: return node.getWordForm().toLowerCase();
 		case lemma: return node.getLemma();
 		case pos_tag: return node.getPOSTag();
 		case feats: return node.getFeat((String)item.value);
