@@ -95,9 +95,6 @@ public class DEPNodeTest
 
 	}
 	
-	
-	
-	@Test
 	public void testBasicFields()
 	{
 		DEPNode node = new DEPNode(1, "Jinho");
@@ -118,22 +115,5 @@ public class DEPNodeTest
 		
 		node.putFeat("fst", "Jinho");
 		assertEquals("Jinho", node.getFeat("fst"));
-	}
-	
-	@Test
-	public void testSetters()
-	{
-		DEPNode node1 = new DEPNode(1, "He");
-		DEPNode node2 = new DEPNode(2, "bought");
-		DEPNode node3 = new DEPNode(3, "a");
-		DEPNode node4 = new DEPNode(4, "car");
-		
-		node2.addDependent(node4, "dobj");
-		node2.addDependent(node1, "nsubj");
-		node4.addDependent(node3, "det");
-		
-		List<DEPNode> list = node2.getDependentList();
-		assertEquals(node1, list.get(0));
-		assertEquals(node4, list.get(1));
 	}
 }
