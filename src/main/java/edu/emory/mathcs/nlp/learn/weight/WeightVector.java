@@ -16,9 +16,7 @@
 package edu.emory.mathcs.nlp.learn.weight;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.vector.IndexValuePair;
@@ -165,15 +163,4 @@ public abstract class WeightVector implements Serializable
 	
 	/** @return the best predicated label with respect to x. */
 	public abstract Prediction predictBest(Vector x);
-	
-	/** @return the all predicated label with respect to x. */
-	public ArrayList<Prediction> predictAll(Vector x){
-		return null;
-	}
-	/** @return the best predicated label with respect to x. */
-	public ArrayList<Prediction> predictK(Vector x, int k) {
-		return null;
-	}
-
-
 }

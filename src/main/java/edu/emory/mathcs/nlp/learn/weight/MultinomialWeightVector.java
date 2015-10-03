@@ -15,7 +15,6 @@
  */
 package edu.emory.mathcs.nlp.learn.weight;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.math3.util.FastMath;
@@ -159,29 +158,16 @@ public class MultinomialWeightVector extends WeightVector
 //		
 //		return new Pair<Prediction,Prediction>(fst, snd);
 //	}
-	
-	@Override
-	public ArrayList<Prediction> predictAll(Vector x)
-	{
-		double[] scores = scores(x);
-		
-		ArrayList<Prediction> pss = new ArrayList<Prediction>();
-		for (int i=0; i<label_size; i++)
-			pss.add(new Prediction(i, scores[i]));
-		
-		return pss;
-	}
-	
-	@Override
-	public ArrayList<Prediction> predictK(Vector x, int k)
-	{
-		double[] scores = scores(x);
-		ArrayList<Prediction> pss = new ArrayList<Prediction>();
-		if (label_size < k) {
-		 	return predictAll(x);
-		}
-		for (int i=0; i<label_size; i++)
-			pss.add(new Prediction(i, scores[i]));
-		return pss;
-	}
+//
+//	@Override
+//	public Prediction[] predictAll(Vector x)
+//	{
+//		double[] scores = scores(x);
+//		Prediction[] ps = new Prediction[label_size];
+//		
+//		for (int i=0; i<label_size; i++)
+//			ps[i] = new Prediction(i, scores[i]);
+//		
+//		return ps;
+//	}
 }

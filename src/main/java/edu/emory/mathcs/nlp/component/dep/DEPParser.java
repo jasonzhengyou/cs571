@@ -18,7 +18,6 @@ package edu.emory.mathcs.nlp.component.dep;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 import edu.emory.mathcs.nlp.component.util.NLPComponent;
 import edu.emory.mathcs.nlp.learn.model.StringModel;
@@ -57,15 +56,9 @@ public class DEPParser<N extends DEPNode> extends NLPComponent<N,DEPState<N>>
 	@Override
 	protected StringPrediction getModelPrediction(DEPState<N> state, StringVector vector)
 	{
-		
 		return models[0].predictBest(vector);
 	}
-	@Override
-	protected List<StringPrediction> getModelPredictionBeam(DEPState<N> state, StringVector vector, int k)
-	{
-		
-		return models[0].predictBest(vector);
-	}
+
 	@Override
 	protected void addInstance(String label, StringVector vector)
 	{
