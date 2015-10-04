@@ -157,8 +157,9 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	
 	public void process(N[] nodes)
 	{
-		if (!isDecode() || isTrain() || isAggregate()) {
+		if ((!isDecode()) || isTrain() || isAggregate()) {
 			processTrain(nodes);
+			return;
 		}
 		
 		S state = createState(nodes);
@@ -175,11 +176,11 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 			
 			state.addToScore(predictionPair.o1.getScore());
 			
-			if (predictionPair.o1.getScore() < SCORE_THRES && !first) {
+			if (predictionPair.o1.getScore() < SCORE_THRES && !first && !isTrain()) {
 				branchingStates.add(prevPrediction);
 			}
 			prevPrediction = new DEPStatePrediction((S) new DEPState((DEPState) state), predictionPair.o2);
-			
+			first = false;
 			StringPrediction label = getPrediction(state, vector); //you need to change this
 			state.next(label);
 		}
