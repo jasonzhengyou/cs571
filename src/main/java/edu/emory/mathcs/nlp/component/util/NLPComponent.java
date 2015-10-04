@@ -157,7 +157,7 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	
 	public void process(N[] nodes)
 	{
-		if (!isDecode() || isTrain()) {
+		if (!isDecode() || isTrain() || isAggregate()) {
 			processTrain(nodes);
 		}
 		

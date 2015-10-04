@@ -166,8 +166,5 @@ public abstract class WeightVector implements Serializable
 	/** @return the best predicated label with respect to x. */
 	public abstract Prediction predictBest(Vector x);
 
-	public Pair<Prediction, Prediction> predictTop2(Vector x) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract Pair<Prediction, Prediction> predictTop2(Vector x);
 }

@@ -17,6 +17,7 @@ package edu.emory.mathcs.nlp.learn.weight;
 
 import java.util.Arrays;
 
+import edu.emory.mathcs.nlp.common.collection.tuple.Pair;
 import edu.emory.mathcs.nlp.common.util.MathUtils;
 import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.vector.IndexValuePair;
@@ -108,4 +109,28 @@ public class BinomialWeightVector extends WeightVector
 		
 		return new Prediction(label, score);
 	}
+
+	@Override
+	public Pair<Prediction, Prediction> predictTop2(Vector x) {
+		Pair<Prediction, Prediction> pair = new Pair<Prediction, Prediction>();
+		double score = score(x);
+		double bound = 0;
+		double upper = 0;
+		int    label = 1;
+		
+		if (isRegression())
+		{
+			bound = 0.5;
+			upper = 1;
+			pair.set(new Prediction(label, score), new Prediction(0, score = upper - score));
+		}
+		
+		if (score < bound)
+		{
+			label = 0;
+			pair.set(new Prediction(label, upper - score), new Prediction(1, score));
+		}
+		return pair;
+	}
+	
 }
