@@ -25,6 +25,7 @@ import edu.emory.mathcs.nlp.learn.util.StringPrediction;
 public abstract class NLPState<N>
 {
 	protected N[] nodes;
+	public double totalScore;
 
 	public NLPState(N[] nodes)
 	{
@@ -51,5 +52,15 @@ public abstract class NLPState<N>
 	{
 		index += window;
 		return DSUtils.isRange(nodes, index) ? nodes[index] : null;
+	}
+	
+	public double getScore() {
+		return this.totalScore;
+	}
+	
+	public double addToScore(double score)
+	{
+		this.totalScore += Math.log(score);
+		return this.totalScore;
 	}
 }

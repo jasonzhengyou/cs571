@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import edu.emory.mathcs.nlp.common.collection.tuple.Pair;
 import edu.emory.mathcs.nlp.component.util.NLPComponent;
 import edu.emory.mathcs.nlp.learn.model.StringModel;
+import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.util.StringInstance;
 import edu.emory.mathcs.nlp.learn.util.StringPrediction;
 import edu.emory.mathcs.nlp.learn.vector.StringVector;
@@ -58,7 +60,16 @@ public class DEPParser<N extends DEPNode> extends NLPComponent<N,DEPState<N>>
 	{
 		return models[0].predictBest(vector);
 	}
-
+	@Override
+	protected Pair<Prediction,Prediction> getModelPredictionBranching(DEPState<N> state, StringVector vector){
+		return models[0].predictBestBranching(vector);
+	}
+	
+	@Override
+	protected StringPrediction getLabelFromPrediciton(Prediction prediction) {
+		return models[0].getLabelFromPrediciton(prediction);
+	}
+	
 	@Override
 	protected void addInstance(String label, StringVector vector)
 	{

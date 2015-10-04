@@ -41,7 +41,29 @@ public class DEPState<N extends DEPNode> extends NLPState<N>
 		super(nodes);
 		stack = new IntArrayList();
 		input = 0;
+		totalScore = 0;
 		shift();
+	}
+	
+	public DEPState(DEPState other) {
+		super((N[]) other.nodes);
+		this.stack = new IntArrayList(other.stack);
+		this.input = other.input;
+		this.oracle = Arrays.copyOf(other.oracle, other.oracle.length);
+		this.totalScore = other.totalScore;
+	}
+
+	@Override
+	public double addToScore(double score)
+	{
+		this.totalScore += Math.log(score);
+		return this.totalScore;
+	}
+	
+	@Override
+	public double getScore()
+	{
+		return this.totalScore;
 	}
 	
 //	====================================== ORACLE ======================================

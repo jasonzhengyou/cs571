@@ -19,11 +19,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import edu.emory.mathcs.nlp.common.collection.tuple.Pair;
+import edu.emory.mathcs.nlp.component.dep.DEPState;
+import edu.emory.mathcs.nlp.component.dep.DEPStatePrediction;
 import edu.emory.mathcs.nlp.component.util.eval.Eval;
 import edu.emory.mathcs.nlp.component.util.feature.FeatureTemplate;
 import edu.emory.mathcs.nlp.component.util.state.NLPState;
 import edu.emory.mathcs.nlp.learn.model.StringModel;
+import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.util.StringPrediction;
 import edu.emory.mathcs.nlp.learn.vector.StringVector;
 
@@ -37,6 +42,9 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	protected StringModel[] models;
 	protected NLPFlag flag;
 	protected Eval eval;
+	private static final double SCORE_THRES = .5;
+	private static final int SIZE_THRES = 5;
+
 	
 //	============================== CONSTRUCTORS ==============================
 	
@@ -149,6 +157,78 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	
 	public void process(N[] nodes)
 	{
+		if (!isDecode() || isTrain()) {
+			processTrain(nodes);
+		}
+		
+		S state = createState(nodes);
+		boolean first = true;
+		DEPStatePrediction prevPrediction = null;
+		feature_template.setState(state);
+		ArrayList<DEPStatePrediction> branchingStates = new ArrayList<DEPStatePrediction>();
+		
+		
+		while (!state.isTerminate())
+		{
+			StringVector vector = extractFeatures(state);
+			Pair<Prediction, Prediction> predictionPair = getPredictionBranching(state, vector);
+			
+			state.addToScore(predictionPair.o1.getScore());
+			
+			if (predictionPair.o1.getScore() < SCORE_THRES && !first) {
+				branchingStates.add(prevPrediction);
+			}
+			prevPrediction = new DEPStatePrediction((S) new DEPState((DEPState) state), predictionPair.o2);
+			
+			StringPrediction label = getPrediction(state, vector); //you need to change this
+			state.next(label);
+		}
+		
+		if (branchingStates.size() > SIZE_THRES){
+			double maxScore = state.getScore();
+			for(DEPStatePrediction branchState: branchingStates) {
+				S branch = (S) branchState.getState();
+				Prediction prediction = branchState.getPrediction();
+				
+				//get label from prediction
+				StringPrediction label = getLabelFromPrediciton(prediction); 
+				
+				//pass to aux AND aux returns score
+				branch.next(label);
+				S finalState = processAux(branch);
+				double branchScore = finalState.getScore();
+				
+				//compare score to max AND set max if necessary AND sets currentState if set max
+				
+				if(branchScore > maxScore) {
+					maxScore = branchScore;
+					state = finalState;
+				}
+			}
+		}
+	
+			
+			
+			
+			
+			
+		if (isEvaluate()) state.evaluate(eval);
+	}
+	public S processAux(S state)
+	{
+		feature_template.setState(state);
+		
+		while (!state.isTerminate())
+		{
+			StringVector vector = extractFeatures(state);
+			StringPrediction label = getPrediction(state, vector);
+			state.next(label);
+		}
+		return state;
+	}
+	
+	public void processTrain(N[] nodes)
+	{
 		S state = createState(nodes);
 		feature_template.setState(state);
 		if (!isDecode()) state.saveOracle();
@@ -170,9 +250,24 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 		return isTrain() ? new StringPrediction(state.getOraclePrediction(), 1) : getModelPrediction(state, vector);
 	}
 	
+	protected Pair<Prediction,Prediction> getPredictionBranching(S state, StringVector vector)
+	{
+		return getModelPredictionBranching(state, vector);
+		
+	}
 	/** @return the vector consisting of all features extracted from the state. */
 	protected StringVector extractFeatures(S state)
 	{
 		return feature_template.extractFeatures();
+	}
+
+	protected Pair<Prediction,Prediction> getModelPredictionBranching(S state, StringVector vector) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected StringPrediction getLabelFromPrediciton(Prediction prediction) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

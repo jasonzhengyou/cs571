@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 
+import edu.emory.mathcs.nlp.common.collection.tuple.Pair;
 import edu.emory.mathcs.nlp.learn.util.Instance;
 import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.util.StringInstance;
@@ -155,6 +156,17 @@ public class StringModel implements Serializable
 	{
 		Prediction p = weight_vector.predictBest(toSparseVector(x));
 		return new StringPrediction(label_map.getLabel(p.getLabel()), p.getScore());
+	}
+	
+	public Pair<Prediction,Prediction> predictBestBranching(StringVector x)
+	{
+		return weight_vector.predictTop2(toSparseVector(x));
+	}
+	
+	public StringPrediction getLabelFromPrediciton(Prediction p)
+	{
+		return new StringPrediction(label_map.getLabel(p.getLabel()), p.getScore());
+
 	}
 	
 	public String trainInfo()
