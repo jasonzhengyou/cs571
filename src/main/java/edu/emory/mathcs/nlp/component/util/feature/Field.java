@@ -29,6 +29,7 @@ public enum Field
 	orthographic,	// set
 	prefix,
 	suffix,
+	capitalized,
 
 	// part-of-speech tagging features
 	lemma,

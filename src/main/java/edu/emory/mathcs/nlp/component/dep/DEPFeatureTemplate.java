@@ -66,6 +66,11 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 				return null;
 			}
 			return node.getSimplifiedWordForm().substring(0, 3);
+		case capitalized:
+			if  (!node.getWordForm().equals(node.getWordForm().toLowerCase())) {
+				return "1";
+			}
+			return "0";
 
 		default: throw new IllegalArgumentException("Unsupported feature: "+item.field);
 		}
