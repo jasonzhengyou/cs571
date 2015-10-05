@@ -100,6 +100,11 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.i, Relation.rmd2, 0, Field.dependency_label));
 		add(new FeatureItem<>(Source.j, Relation.lmd2, 0, Field.dependency_label));
 		
+		add(new FeatureItem<>(Source.i, 0, Field.distance));
+		add(new FeatureItem<>(Source.j, 0, Field.distance));
+		add(new FeatureItem<>(Source.k, 0, Field.distance));
+
+		
 		add(new FeatureItem<>(Source.i, Relation.h, 0, Field.simplified_word_form));
 		add(new FeatureItem<>(Source.i, Relation.h2, 0, Field.simplified_word_form));
 
@@ -118,6 +123,7 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		// boolean features
 		addSet(new FeatureItem<>(Source.i, 0, Field.binary));
 		addSet(new FeatureItem<>(Source.j, 0, Field.binary));
+		
 	}
 }
 

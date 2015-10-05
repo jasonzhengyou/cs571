@@ -158,20 +158,8 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 			iterate(reader, developFiles, nodes -> component.process(nodes));
 			currScore = eval.score();
 			
-			if (prevScore < currScore)
+			if (prevScore < currScore || twoBackScore < currScore || threeBackScore < currScore)
 			{
-				prevScore  = currScore;
-				twoBackScore  = prevScore;
-				threeBackScore  = twoBackScore;
-				prevWeight = model.getWeightVector().toArray().clone();
-			}
-			else if (twoBackScore < currScore) { // try 2 back as well
-				prevScore  = currScore;
-				twoBackScore  = prevScore;
-				threeBackScore  = twoBackScore;
-				prevWeight = model.getWeightVector().toArray().clone();
-			}
-			else if (threeBackScore < currScore) { // try 3 back as well
 				prevScore  = currScore;
 				twoBackScore  = prevScore;
 				threeBackScore  = twoBackScore;
