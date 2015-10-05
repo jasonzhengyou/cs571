@@ -129,6 +129,14 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.k, 0, Field.prefix), new FeatureItem<>(Source.k, 1, Field.prefix));
 		add(new FeatureItem<>(Source.k, 0, Field.suffix), new FeatureItem<>(Source.k, 1, Field.suffix));
 		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.lemma));
+		add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.lemma));
+		add(new FeatureItem<>(Source.j, 0, Field.lemma), new FeatureItem<>(Source.j, 1, Field.lemma));
+		add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.pos_tag));
+		add(new FeatureItem<>(Source.j, 0, Field.lemma), new FeatureItem<>(Source.j, 1, Field.pos_tag));
+
+		
+		
+		
 //3 gram
 		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.lemma), new FeatureItem<>(Source.k, 2, Field.lemma));
 		add(new FeatureItem<>(Source.k, 0, Field.simplified_word_form), new FeatureItem<>(Source.k, 1, Field.pos_tag), new FeatureItem<>(Source.k, 2, Field.pos_tag));
