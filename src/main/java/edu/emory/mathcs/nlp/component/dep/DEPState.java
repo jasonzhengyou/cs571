@@ -193,7 +193,13 @@ public class DEPState<N extends DEPNode> extends NLPState<N>
 	 */
 	public N peekStack(int window)
 	{
-		return window < stack.size() ? nodes[stack.peekInt(window)] : null;
+		if(window < stack.size()) {
+			int index = stack.peekInt(window);
+			if (index >= 0) {
+				return nodes[index];
+			}
+		}
+		return null;
 	}
 	
 	public N getStack(int window)
