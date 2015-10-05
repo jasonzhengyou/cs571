@@ -16,6 +16,8 @@
 package edu.emory.mathcs.nlp.component.dep;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.emory.mathcs.nlp.component.util.feature.Direction;
 import edu.emory.mathcs.nlp.component.util.feature.FeatureItem;
@@ -71,8 +73,6 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 				return "1";
 			}
 			return "0";
-		case ancestorSize:
-			return String.valueOf(node.getAncestorSet().size());
 
 		default: throw new IllegalArgumentException("Unsupported feature: "+item.field);
 		}
@@ -86,11 +86,24 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 		
 		switch (item.field)
 		{
+		case ancestorSize:
+			return getAncestorFeatures(node);
 		case binary: return getBinaryFeatures(node);
 		default: throw new IllegalArgumentException("Unsupported feature: "+item.field);
 		}
 	}
-	
+	protected String[] getAncestorFeatures(DEPNode node)
+	{
+		Set<DEPNode> ancestors = node.getAncestorSet();
+		String[] ancestorArray = new String[ancestors.size()];
+		int i = 0;
+		for (DEPNode d : ancestors) {
+			ancestorArray[i] = d.getLabel();
+			i++;
+		}
+		return ancestorArray;
+
+	}
 	protected String[] getBinaryFeatures(DEPNode node)
 	{
 		String[] values = new String[2];
