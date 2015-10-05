@@ -71,6 +71,8 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 				return "1";
 			}
 			return "0";
+		case ancestorSize:
+			return String.valueOf(node.getAncestorSet().size());
 
 		default: throw new IllegalArgumentException("Unsupported feature: "+item.field);
 		}

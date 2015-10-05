@@ -43,5 +43,6 @@ public enum Field
 	valency,
 	
 	// more
-	binary;	// set
+	binary, // set
+	ancestorSize;	
 }
