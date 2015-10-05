@@ -43,8 +43,24 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.k,  2, Field.pos_tag));
 		
 		// valency features
+		add(new FeatureItem<>(Source.i, -2, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.i, -1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.i, 0, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.i, 1, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.i, 2, Field.valency, Direction.all));
+
+		add(new FeatureItem<>(Source.j, -2, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.j, -1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.j, 0, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.j, 1, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.j, 2, Field.valency, Direction.all));
+
+		add(new FeatureItem<>(Source.k, -2, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.k, -1, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.k, 0, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.k, 1, Field.valency, Direction.all));
+		add(new FeatureItem<>(Source.k, 2, Field.valency, Direction.all));
+		
 		
 		//word form
 		add(new FeatureItem<>(Source.i, -1, Field.simplified_word_form));
@@ -104,9 +120,10 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.i, -1, Field.capitalized));
 		add(new FeatureItem<>(Source.j, 0, Field.capitalized));
 		add(new FeatureItem<>(Source.k, 0, Field.capitalized));
-		addSet(new FeatureItem<>(Source.i, 0, Field.ancestorSize));
-		addSet(new FeatureItem<>(Source.j, 0, Field.ancestorSize));
-		addSet(new FeatureItem<>(Source.k, 0, Field.ancestorSize));
+		
+//		addSet(new FeatureItem<>(Source.i, 0, Field.ancestorSize));
+//		addSet(new FeatureItem<>(Source.j, 0, Field.ancestorSize));
+//		addSet(new FeatureItem<>(Source.k, 0, Field.ancestorSize));
 
 		
 		add(new FeatureItem<>(Source.i, Relation.h, 0, Field.simplified_word_form));
