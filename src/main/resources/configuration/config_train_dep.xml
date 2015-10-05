@@ -11,11 +11,12 @@
     </tsv>
 
     <optimizer>
-        <algorithm>adagrad</algorithm>
+        <algorithm>adagrad-mini-batch</algorithm>
         <label_cutoff>4</label_cutoff>
         <feature_cutoff>3</feature_cutoff>
         <reset_weights>false</reset_weights>
         <average>false</average>
+        <batch_ratio>0.1</batch_ratio>
         <learning_rate>0.04</learning_rate>
         <bias>0</bias>
     </optimizer>
