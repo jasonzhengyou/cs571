@@ -55,8 +55,6 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.j, 1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.j, 2, Field.valency, Direction.all));
 
-		add(new FeatureItem<>(Source.k, -2, Field.valency, Direction.all));
-		add(new FeatureItem<>(Source.k, -1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.k, 0, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.k, 1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.k, 2, Field.valency, Direction.all));
