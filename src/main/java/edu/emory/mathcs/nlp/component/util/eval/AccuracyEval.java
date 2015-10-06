@@ -62,4 +62,9 @@ public class AccuracyEval implements Eval
 	{
 		return String.format("ACC = %5.2f", score());
 	}
+
+	@Override
+	public String scores() {
+		return null;
+	}
 }

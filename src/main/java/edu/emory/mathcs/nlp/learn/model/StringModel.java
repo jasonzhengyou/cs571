@@ -23,6 +23,7 @@ import java.util.Deque;
 import java.util.List;
 
 import edu.emory.mathcs.nlp.common.collection.tuple.Pair;
+import edu.emory.mathcs.nlp.deeplearning.network.FeedForwardNeuralNetwork;
 import edu.emory.mathcs.nlp.learn.util.Instance;
 import edu.emory.mathcs.nlp.learn.util.Prediction;
 import edu.emory.mathcs.nlp.learn.util.StringInstance;
@@ -45,6 +46,7 @@ public class StringModel implements Serializable
 	private FeatureMap            feature_map;
 	private WeightVector          weight_vector;
 	private float                 bias;
+	private FeedForwardNeuralNetwork neuralNet;
 	
 	public StringModel(WeightVector vector)
 	{
@@ -178,5 +180,16 @@ public class StringModel implements Serializable
 		build.append("- # of features : "+feature_map.size());
 		
 		return build.toString();
+	}
+
+	public void setNeuralNetwork(FeedForwardNeuralNetwork ffnn) {
+		this.neuralNet = ffnn;
+	}
+	
+	public boolean isUsingNeuralNetwork() {
+		if(this.neuralNet != null) {
+			return true;
+		}
+		return false;
 	}
 }

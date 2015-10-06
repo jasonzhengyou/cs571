@@ -28,6 +28,7 @@ import edu.emory.mathcs.nlp.common.util.XMLUtils;
 import edu.emory.mathcs.nlp.component.util.reader.TSVIndex;
 import edu.emory.mathcs.nlp.component.util.reader.TSVReader;
 import edu.emory.mathcs.nlp.component.util.train.Aggregation;
+import edu.emory.mathcs.nlp.deeplearning.network.FeedForwardNeuralNetwork;
 import edu.emory.mathcs.nlp.learn.model.StringModel;
 import edu.emory.mathcs.nlp.learn.optimization.Optimizer;
 import edu.emory.mathcs.nlp.learn.optimization.liblinear.LiblinearL2SVC;
@@ -41,6 +42,7 @@ import edu.emory.mathcs.nlp.learn.optimization.sgd.Perceptron;
  */
 public abstract class NLPConfig<N> implements ConfigXML
 {
+	private static final String HIDDEN_LAYER = null;
 	protected Element xml;
 	
 //	=================================== CONSTRUCTORS ===================================
@@ -187,5 +189,15 @@ public abstract class NLPConfig<N> implements ConfigXML
 		double tolerance  = XMLUtils.getDoubleTextContentFromFirstElementByTagName (eOptimizer, TOLERANCE_DELTA);
 		
 		return new LiblinearL2SVC(model.getWeightVector(), threadSize, lossType, cost, tolerance);
+	}
+
+	public FeedForwardNeuralNetwork getNeuralNetwork(StringModel stringModel, int i) {
+		Element eOptimizer = XMLUtils.getElementByTagName(xml, OPTIMIZER, i);
+		double  learningRate = XMLUtils.getDoubleTextContentFromFirstElementByTagName (eOptimizer, LEARNING_RATE);
+		int  hiddenLayer = XMLUtils.getIntegerTextContentFromFirstElementByTagName(eOptimizer, HIDDEN_LAYER);
+		initOptimizer(eOptimizer, stringModel);
+		int inputLayerSize = stringModel.getWeightVector().featureSize(); //input is the size of the features
+		int outputLayerSize = stringModel.getWeightVector().labelSize();
+		return new FeedForwardNeuralNetwork(learningRate, inputLayerSize, outputLayerSize, hiddenLayer);
 	}
 }

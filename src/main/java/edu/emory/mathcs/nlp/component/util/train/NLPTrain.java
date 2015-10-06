@@ -148,33 +148,37 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 	protected double trainOnline(TSVReader<N> reader, List<String> developFiles, NLPComponent<N,?> component, Optimizer optimizer, StringModel model)
 	{
 		Eval eval = component.getEval();
-		double prevScore = 0, currScore, bestScore, twoBackScore = 0, threeBackScore = 0;
-		float[] prevWeight = null;
+		double prevScore = 0, currScore, bestScore = 0;
 		
-		for (int epoch=1; ;epoch++)
+	    float[] bestWeight = null;
+
+	    int maxEpoch = 50;
+	    int patience = 10;
+	    double patienceIncrease = 1.3;
+        double improveThreshold = 1.0025;
+		
+        for (int epoch=1; epoch < maxEpoch && epoch < patience;epoch++)
 		{
 			eval.clear();
 			optimizer.train(model.getInstanceList());
 			iterate(reader, developFiles, nodes -> component.process(nodes));
 			currScore = eval.score();
 			
-			if (prevScore < currScore || twoBackScore < currScore || threeBackScore < currScore)
-			{
-				prevScore  = currScore;
-				twoBackScore  = prevScore;
-				threeBackScore  = twoBackScore;
-				prevWeight = model.getWeightVector().toArray().clone();
-			}
-			else
-			{
-				model.getWeightVector().fromArray(prevWeight);
-				break;
-			}
-			
-			BinUtils.LOG.info(String.format("%3d: %5.2f\n", epoch, currScore));
+            if(currScore > bestScore){
+                if(currScore > bestScore * improveThreshold && epoch > 1)	//increase iteration if improvement is strong enough
+                    patience = patience * patienceIncrease > maxEpoch ? maxEpoch : (int)(patience * patienceIncrease);
+                bestScore = currScore;
+                bestWeight = model.getWeightVector().toArray().clone();
+            }
+            if(currScore < prevScore){
+                patience--;
+            }
+            prevScore = currScore;
+            BinUtils.LOG.info(String.format("at epoch %3d, patience %3d: %s\n", epoch, patience, eval.score()));
+    	    BinUtils.LOG.info(String.format("%3d: %5.2f\n", epoch, currScore));
 		}
-		
-		return prevScore; 
+		model.getWeightVector().fromArray(bestWeight);
+		return bestScore; 
 	}
 	
 	/** Called by {@link #train(TSVReader, List, NLPComponent, NLPConfig)}. */

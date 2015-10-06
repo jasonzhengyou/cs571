@@ -22,4 +22,5 @@ public interface Eval
 {
 	void   clear();
 	double score();
+	String scores();
 }

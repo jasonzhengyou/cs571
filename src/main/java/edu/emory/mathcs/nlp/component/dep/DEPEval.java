@@ -69,4 +69,11 @@ public class DEPEval implements Eval
 	{
 		return String.format("LAS = %5.2f, UAS = %5.2f", getLAS(), getUAS());
 	}
+	
+	@Override
+    public String scores(){
+        double _uas = 100d * uas / total;
+        double _las = 100d * las / total;
+        return String.format("UAS is : %5.2f, LAS is :%5.2f", _uas, _las);
+    }
 }
