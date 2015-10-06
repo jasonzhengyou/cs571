@@ -174,8 +174,8 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
                 patience--;
             }
             prevScore = currScore;
-            BinUtils.LOG.info(String.format("at epoch %3d, patience %3d: %s\n", epoch, patience, eval.score()));
-    	    BinUtils.LOG.info(String.format("%3d: %5.2f\n", epoch, currScore));
+            BinUtils.LOG.info(String.format("epoch %3d, patience %3d: %s\n", epoch, patience, currScore));
+    	    //BinUtils.LOG.info(String.format("%3d: %5.2f\n", epoch, currScore));
 		}
 		model.getWeightVector().fromArray(bestWeight);
 		return bestScore; 

@@ -22,6 +22,7 @@ import java.util.Set;
 import edu.emory.mathcs.nlp.component.util.feature.Direction;
 import edu.emory.mathcs.nlp.component.util.feature.FeatureItem;
 import edu.emory.mathcs.nlp.component.util.feature.FeatureTemplate;
+import edu.emory.mathcs.nlp.component.util.feature.Field;
 
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
@@ -73,6 +74,8 @@ public abstract class DEPFeatureTemplate extends FeatureTemplate<DEPNode,DEPStat
 				return "1";
 			}
 			return "0";
+		case path:
+			return node.getPath(state.getInput(), Field.dependency_label);
 
 		default: throw new IllegalArgumentException("Unsupported feature: "+item.field);
 		}

@@ -9,7 +9,6 @@ import edu.emory.mathcs.nlp.component.util.feature.Source;
 
 public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 	private static final long serialVersionUID = 4717085054409332081L;
-
 	@Override
 	protected void init()
 	{
@@ -43,16 +42,8 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.k,  2, Field.pos_tag));
 		
 		// valency features
-		add(new FeatureItem<>(Source.i, -1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.i, 0, Field.valency, Direction.all));
-		add(new FeatureItem<>(Source.i, 1, Field.valency, Direction.all));
-
-		add(new FeatureItem<>(Source.j, -1, Field.valency, Direction.all));
 		add(new FeatureItem<>(Source.j, 0, Field.valency, Direction.all));
-		add(new FeatureItem<>(Source.j, 1, Field.valency, Direction.all));
-
-		add(new FeatureItem<>(Source.k, 1, Field.valency, Direction.all));
-		
 		
 		//word form
 		add(new FeatureItem<>(Source.i, -1, Field.simplified_word_form));
@@ -108,37 +99,36 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		add(new FeatureItem<>(Source.i, Relation.rmd2, 0, Field.dependency_label));
 		add(new FeatureItem<>(Source.j, Relation.lmd2, 0, Field.dependency_label));
 		
+		add(new FeatureItem<>(Source.i, Relation.h, 0, Field.simplified_word_form));
+		add(new FeatureItem<>(Source.i, Relation.h2, 0, Field.simplified_word_form));
 		add(new FeatureItem<>(Source.i, 0, Field.capitalized));
 		add(new FeatureItem<>(Source.i, -1, Field.capitalized));
 		add(new FeatureItem<>(Source.j, 0, Field.capitalized));
 		add(new FeatureItem<>(Source.k, 0, Field.capitalized));
-		
-//		addSet(new FeatureItem<>(Source.i, 0, Field.ancestorSize));
-//		addSet(new FeatureItem<>(Source.j, 0, Field.ancestorSize));
-//		addSet(new FeatureItem<>(Source.k, 0, Field.ancestorSize));
-
-		
-		add(new FeatureItem<>(Source.i, Relation.h, 0, Field.simplified_word_form));
-		add(new FeatureItem<>(Source.i, Relation.h2, 0, Field.simplified_word_form));
 
 //2 gram
-		//add(new FeatureItem<>(Source.i, Relation.h, 0, Field.lemma), new FeatureItem<>(Source.i, Relation.h2, 0, Field.lemma));
-		//add(new FeatureItem<>(Source.i, Relation.h, 0, Field.pos_tag), new FeatureItem<>(Source.i, Relation.h2, 0, Field.pos_tag));
-		
 		add(new FeatureItem<>(Source.k, 0, Field.simplified_word_form), new FeatureItem<>(Source.k, 1, Field.pos_tag));
 		add(new FeatureItem<>(Source.k, 0, Field.prefix), new FeatureItem<>(Source.k, 1, Field.prefix));
 		add(new FeatureItem<>(Source.k, 0, Field.suffix), new FeatureItem<>(Source.k, 1, Field.suffix));
-		
+		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.lemma));
 		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.lemma));
 		add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.lemma));
 		add(new FeatureItem<>(Source.j, 0, Field.lemma), new FeatureItem<>(Source.j, 1, Field.lemma));
 		add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.pos_tag));
 		add(new FeatureItem<>(Source.j, 0, Field.lemma), new FeatureItem<>(Source.j, 1, Field.pos_tag));
 		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.pos_tag));
+		
+        add(new FeatureItem<>(Source.j,  0, Field.lemma), new FeatureItem<>(Source.i,  0, Field.path));
+        add(new FeatureItem<>(Source.j,  0, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.path));
+        
+        add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 0, Field.valency, Direction.right));
+        add(new FeatureItem<>(Source.i,  0, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.valency, Direction.right));
+        add(new FeatureItem<>(Source.i,  0, Field.lemma), new FeatureItem<>(Source.i, 0, Field.valency, Direction.left));
+        add(new FeatureItem<>(Source.i,  0, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.valency, Direction.left));
+        add(new FeatureItem<>(Source.j,  0, Field.lemma), new FeatureItem<>(Source.j, 0, Field.valency, Direction.left));
+        add(new FeatureItem<>(Source.j,  0, Field.pos_tag), new FeatureItem<>(Source.j, 0, Field.valency, Direction.left));
+		
 
-		
-		
-		
 //3 gram
 		add(new FeatureItem<>(Source.k, 0, Field.lemma), new FeatureItem<>(Source.k, 1, Field.lemma), new FeatureItem<>(Source.k, 2, Field.lemma));
 		add(new FeatureItem<>(Source.k, 0, Field.simplified_word_form), new FeatureItem<>(Source.k, 1, Field.pos_tag), new FeatureItem<>(Source.k, 2, Field.pos_tag));
@@ -146,29 +136,5 @@ public class DEPFeatureTemplate1 extends DEPFeatureTemplate{
 		// boolean features
 		addSet(new FeatureItem<>(Source.i, 0, Field.binary));
 		addSet(new FeatureItem<>(Source.j, 0, Field.binary));
-		
-		add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i, 1, Field.lemma), new FeatureItem<>(Source.i, 1, Field.pos_tag));
-
-        // s1.wt◦s2.w
-        add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i, 1, Field.lemma));
-        add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.lemma), new FeatureItem<>(Source.i, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i, 1, Field.lemma), new FeatureItem<>(Source.i, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i, 1, Field.lemma));
-        add(new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.j, 0, Field.pos_tag));
-
-        // s2.t◦s1.t◦b1.t
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.j, 0, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i,  Relation.lnd, 0, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i,  Relation.rnd, 0, Field.pos_tag));
-
-        // s2.t◦s1.t◦lc1(s2).t
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i,  Relation.lnd, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.pos_tag), new FeatureItem<>(Source.i,  Relation.rnd, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i,  Relation.rnd, 1, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.i,  Relation.lnd, 0, Field.pos_tag));
-        add(new FeatureItem<>(Source.i, 1, Field.pos_tag), new FeatureItem<>(Source.i, 0, Field.lemma), new FeatureItem<>(Source.j,  0, Field.pos_tag));
 	}
 }
-

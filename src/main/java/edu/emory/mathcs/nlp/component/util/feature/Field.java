@@ -27,6 +27,7 @@ public enum Field
 	uncapitalized_simplified_word_form,
 	word_shape,
 	orthographic,	// set
+	path,
 	prefix,
 	suffix,
 	capitalized,
@@ -45,4 +46,5 @@ public enum Field
 	// more
 	binary, // set
 	ancestorSize;	
+	
 }
