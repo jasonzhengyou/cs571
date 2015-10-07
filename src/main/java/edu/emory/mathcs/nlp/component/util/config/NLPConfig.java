@@ -195,7 +195,7 @@ public abstract class NLPConfig<N> implements ConfigXML
 		Element eOptimizer = XMLUtils.getElementByTagName(xml, OPTIMIZER, i);
 		double  learningRate = XMLUtils.getDoubleTextContentFromFirstElementByTagName (eOptimizer, LEARNING_RATE);
 		//int  hiddenLayer = XMLUtils.getIntegerTextContentFromFirstElementByTagName(eOptimizer, HIDDEN_LAYER);
-		int hiddenLayer = 65;
+		int hiddenLayer = 100; //size of the hidden layer
 		initOptimizer(eOptimizer, stringModel);
 		int inputLayerSize = stringModel.getWeightVector().featureSize(); //input is the size of the features
 		int outputLayerSize = stringModel.getWeightVector().labelSize();
