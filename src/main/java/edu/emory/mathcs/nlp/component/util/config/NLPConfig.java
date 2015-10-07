@@ -194,7 +194,8 @@ public abstract class NLPConfig<N> implements ConfigXML
 	public FeedForwardNeuralNetwork getNeuralNetwork(StringModel stringModel, int i) {
 		Element eOptimizer = XMLUtils.getElementByTagName(xml, OPTIMIZER, i);
 		double  learningRate = XMLUtils.getDoubleTextContentFromFirstElementByTagName (eOptimizer, LEARNING_RATE);
-		int  hiddenLayer = XMLUtils.getIntegerTextContentFromFirstElementByTagName(eOptimizer, HIDDEN_LAYER);
+		//int  hiddenLayer = XMLUtils.getIntegerTextContentFromFirstElementByTagName(eOptimizer, HIDDEN_LAYER);
+		int hiddenLayer = 65;
 		initOptimizer(eOptimizer, stringModel);
 		int inputLayerSize = stringModel.getWeightVector().featureSize(); //input is the size of the features
 		int outputLayerSize = stringModel.getWeightVector().labelSize();
