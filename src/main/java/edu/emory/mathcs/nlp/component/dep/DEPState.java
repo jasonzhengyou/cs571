@@ -262,4 +262,9 @@ public class DEPState<N extends DEPNode> extends NLPState<N>
 	{
 		return nodes[nodes.length-1] == node;
 	}
+	
+	@Override
+	public int getSentenceLength() {
+		return nodes.length;
+	}
 }

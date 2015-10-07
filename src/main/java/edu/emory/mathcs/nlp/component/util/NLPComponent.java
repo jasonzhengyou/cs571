@@ -43,8 +43,6 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 	protected NLPFlag flag;
 	protected Eval eval;
 	private static final double SCORE_THRES = .5;
-	private static final int SIZE_THRES = 5;
-
 	
 //	============================== CONSTRUCTORS ==============================
 	
@@ -185,7 +183,7 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 			state.next(label);
 		}
 		
-		if (branchingStates.size() > SIZE_THRES){
+		if (branchingStates.size() > (state.getSentenceLength()/2)){
 			double maxScore = state.getScore();
 			for(DEPStatePrediction branchState: branchingStates) {
 				S branch = (S) branchState.getState();
@@ -207,12 +205,7 @@ public abstract class NLPComponent<N,S extends NLPState<N>> implements Serializa
 				}
 			}
 		}
-	
-			
-			
-			
-			
-			
+				
 		if (isEvaluate()) state.evaluate(eval);
 	}
 	public S processAux(S state)

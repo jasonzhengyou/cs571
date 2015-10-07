@@ -63,4 +63,8 @@ public abstract class NLPState<N>
 		this.totalScore += Math.log(score);
 		return this.totalScore;
 	}
+
+	public int getSentenceLength() {
+		return 5;
+	}
 }
