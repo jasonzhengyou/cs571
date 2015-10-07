@@ -156,6 +156,11 @@ public class StringModel implements Serializable
 	
 	public StringPrediction predictBest(StringVector x)
 	{
+		if(isUsingNeuralNetwork()) {
+			Prediction p = neuralNet.predictBest(toSparseVector(x));
+			return new StringPrediction(label_map.getLabel(p.getLabel()), p.getScore());
+		}
+		
 		Prediction p = weight_vector.predictBest(toSparseVector(x));
 		return new StringPrediction(label_map.getLabel(p.getLabel()), p.getScore());
 	}
