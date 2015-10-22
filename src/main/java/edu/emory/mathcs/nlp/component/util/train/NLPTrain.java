@@ -25,7 +25,6 @@ import org.kohsuke.args4j.Option;
 import edu.emory.mathcs.nlp.common.util.BinUtils;
 import edu.emory.mathcs.nlp.common.util.FileUtils;
 import edu.emory.mathcs.nlp.common.util.IOUtils;
-import edu.emory.mathcs.nlp.component.ner.NERNode;
 import edu.emory.mathcs.nlp.component.util.NLPComponent;
 import edu.emory.mathcs.nlp.component.util.NLPFlag;
 import edu.emory.mathcs.nlp.component.util.config.NLPConfig;
@@ -65,8 +64,6 @@ public abstract class NLPTrain<N,S extends NLPState<N>>
 		BinUtils.initArgs(args, this);
 	}
 	
-
-
 	/** Collects necessary lexicons for the component before training. */
 	public abstract void collect(TSVReader<N> reader, List<String> inputFiles, NLPComponent<N,S> component, NLPConfig<N> configuration);
 	protected abstract NLPConfig<N> createConfiguration(String filename);
