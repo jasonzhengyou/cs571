@@ -84,13 +84,15 @@ def main():
     for sentence in read_dev('dat/dev.tsv'):
         print classifier.classify(extract_features(sentence.split()))
         
-def accuracy():
-    correct = 0;
-    total = 0;
-    for i in numSentencesTested:
-        total++
-        if test[i] == gold[i]:
-            correct++
-    print 'accuracy' + correct/total
+def accuracy(f_gold='dat/devEval.txt', f_test='multinomialNBoutput.txt'):
+    with open(f_gold, 'r') as fg, open(f_test, 'r') as ft:
+        correct = 0.0;
+        total = 0.0;
+        for gold, test in zip(fg.readlines(), ft.readlines()):
+            total += 1
+            if int(gold) == int(test):
+                correct += 1
+        print 'accuracy'
+	print correct/total
 
 main()
