@@ -6,86 +6,90 @@ import cPickle as pickle
 import time
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import linear_model
+import pandas as pd
+import numpy as np
 
-"""READING IN FROM FILES"""
-def read_train(source):
-    # open data file
-    # discard header line
-    fdata = open(source, 'r')
-    fdata.readline()
-    
-    phrases = []
-    for data in fdata:
-        data = data.split('\t')
-        phrases.append(([token.lower().rstrip() for token in data[2].split(' ')],int(data[3].rstrip())))
-    return phrases
+all_words = []
 
+def extract_features_dict(text=None, is_raw=False):
+    if is_raw:
+        text = text.split(' ')
 
-def read_data(source='', which='train'):
-
-    phrases = {
-        'train': read_train,
-        'dev': 'dev',   # unimplemented TODO 
-        'test': 'test' # unimplemented TODO 
-    }[which](source)
-
-    return phrases
-    fdata.close()
-
-    
-"""WORD AND FEATURE EXTRACTION""" 
-def get_phrase_list(sent_tups, with_label=False):
-    phrases = []
-    for s_tup in sent_tups:
-        if not with_label:
-            phrases.append(' '.join(s_tup[0]))
-        else:
-            phrases.append((' '.join(s_tup[0]), s_tup[1]))
-    return phrases
-
-def get_all_words(sent_tups):
-    all_words = []
-    for sent_tup in sent_tups:
-        words, _ = sent_tup
-        all_words.extend(words)
-    return all_words
-
-def get_features(words):
-    words = nltk.FreqDist(words)
-    features = words.keys()
-    return features
-
-global_features = {}
-
-def extract_features(doc):
-    words = set(doc)
     features = {}
-    for i, word in enumerate(global_features):
-        features[i] = int(word in words)
-        #features['contains(%s)' % word] = (word in words)
+    #word_feature = lambda x: 'contains(%s)' % x
+
+    text_set = set(text)
+    #print 'inner feature extraction'
+    for i, word in enumerate(all_words):
+        if word in text_set:
+            features[i] = 1
+        else:
+            features[i] = 0
+    
+    #print 'returning dict features'
     return features
 
-def main():
-    print 'reading training data'
+def use_feature_dicts(train_x, is_raw = True):
+    train_x_dicts = []
+    for x in train_x:
+        #print 'extracting dict'
+        train_x_dict = extract_features_dict(x, is_raw = is_raw)
+        train_x_dicts.append(train_x_dict)
+    # print train_x_dicts
+    vec = DictVectorizer()
+    #print 'transforming...'
+    return vec.fit_transform(train_x_dicts)
+
+def word_to_set(phrase_list, is_raw=False, trim = 1):
+    words_list = []
+    words_count = {}
+    for phrase in phrase_list:
+        for word in phrase.split():
+            token = word.lower().rstrip()
+            if token in words_count:
+                words_count[token] += 1
+            else:
+                words_count[token] = 1
+            if words_count[token] == trim:
+                words_list.append(token)
+
+    return list(set(words_list))
+
+def main(clf):
+    #print 'getting train'
     train = pd.read_csv('dat/trainMN.tsv',sep = '\t')
-	test = pd.read_csv('dat/devNM.tsv', sep = '\t')
-    count_vector = CountVectorizer()
-    train_counts = count_vector.fit_transform(train['Phrase'])
-    tfidf_vectorizer = TfidfVectorizer(min_df=5,
-                             max_df = 0.8,
-                             sublinear_tf=True,
-                             use_idf=True)
-    train_vectors = tfidf_vectorizer.fit_transform(train_counts)
-    test_vectors = tfidf_vectorizer.transform(train_vectors)
-    classifier = MultinomialNB().fit(x_train_tfidf, train['Sentiment'])
+    #print 'getting test'
+    test = pd.read_csv('dat/devMN.tsv', sep = '\t')
+
+    global all_words
+    all_words = word_to_set(train['Phrase'], trim=20, is_raw=True)
+
+    #print 'creating x dict vectors from train'
+    train_x = train['Phrase']
+    #print 'extracting...'
+    train_x = use_feature_dicts(train_x)
+    # print train_x
+
+    #print 'creating train y'
+    train_y = [int(y) for y in train['Sentiment']]
+    if clf == 'NB':
+        classifier = MultinomialNB().fit(train_x, train_y)
+    elif clf == 'RF':
+        classifier = RandomForestClassifier().fit(train_x, train_y)
+    elif clf == 'LG':
+        classifier = linear_model.LinearRegression()
+        classifier = classifier.fit(train_x, train_y)
+    elif clf == 'SGD':
+        classifier = SGDClassifier().fit(train_x, train_y)
+    #print 'testing'
+    test_x = use_feature_dicts(test['Phrase'])
     
-    test_counts = count_vector.transform(test['Phrase'])
-	test_vectors = tfidf_transformer.transform(test_counts)
-	predicted = clf.predict(test_vectors)
-    
-    for i in predicted:
+    for i in classifier.predict(test_x):
         print i
-    
-    pickle.dump(clf, open('multinomialNB.pickle', 'w'))
-    
-main()
+    title = clf + '.pickle'
+    pickle.dump(classifier, open(title, 'w'))
+
+main(clf='RF')
